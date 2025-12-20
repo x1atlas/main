@@ -498,6 +498,10 @@ AddToggle(Farm, {
 local Farm = Tabs._Farm:AddSection({Title = "Fully"}) 
 
 AddToggle(Farm, {
+    Title = "Auto Xmas",
+})
+
+AddToggle(Farm, {
     Title = "Auto Farm Fully",
 })
 
@@ -821,7 +825,8 @@ Ex_Function["Auto Anos"] = function()
                         end
                     end
                 end
-            elseif LocalPlayer.Inventory["Summon Orb"].Value < 100 then
+            end
+            if LocalPlayer.Inventory["Summon Orb"].Value < 100 then
                 if LocalPlayer.Currencys.Gems.Value >= 1000 then
                     LocalPlayer.PlayerGui.Button["Shop Item"].Visible = true
                     Func:ClickGui(LocalPlayer.PlayerGui.Button["Shop Item"].Gem["Summon Orb"].Buy.Button)
@@ -908,6 +913,43 @@ Ex_Function["Auto Sea Beast"] = function()
     end 
 end
 
+Ex_Function["Auto Xmas"] = function()
+    while Config["Auto Xmas"] and task.wait() do 
+        pcall(function()
+            if workspace.Main.Characters["Abyss Hill [Upper]"].Boss:FindFirstChild("Kafka") then
+                for i,v in next, workspace.Main.Characters["Abyss Hill [Upper]"].Boss:GetChildren() do 
+                    if v.Name == "Kafka" and v.Humanoid.Health > 0 then 
+                        TP(v.HumanoidRootPart.CFrame * CFrame.new(0,15,0) * CFrame.Angles(math.rad(-90),0,0))
+                    end 
+                end 
+            elseif workspace.Main.Characters["Xmas Island"].Boss:FindFirstChild("Herta") then
+                for i,v in next, workspace.Main.Characters["Xmas Island"].Boss:GetChildren() do 
+                    if v.Name == "Herta" and v.Humanoid.Health > 0 then 
+                        TP(v.HumanoidRootPart.CFrame * CFrame.new(0,15,0) * CFrame.Angles(math.rad(-90),0,0))
+                    end 
+                end 
+            elseif workspace.Server["Snow Brawler"].Value >= 100 then
+                TP(workspace.Main.NPCs["Boss Spawn4"].HumanoidRootPart.CFrame* CFrame.new(0,0,-7))
+                workspace.Main.NPCs["Boss Spawn4"]["{}"].HoldDuration = 0
+                SendKey("E")
+            elseif workspace.Main.Characters["Xmas Island"]:FindFirstChild("Snow Brawler") then
+                for i,v in next, workspace.Main.Characters["Xmas Island"]["Snow Brawler"]:GetChildren() do 
+                    if v.Name == "Snow Brawler" and v.Humanoid.Health > 0 then 
+                        TP(v.HumanoidRootPart.CFrame * CFrame.new(0,15,0) * CFrame.Angles(math.rad(-90),0,0))
+                    end 
+                end 
+            end
+            if not workspace.Main.Characters["Xmas Island"]["Snow Brawler"]:GetChildren()[7] and not workspace.Main.Characters["Abyss Hill [Upper]"].Boss:FindFirstChild("Kafka") and not  workspace.Main.Characters["Xmas Island"].Boss:FindFirstChild("Herta") then
+                for i,v in next, workspace.Main.Characters["Xmas Island"]["Snow Brawler"]:GetChildren() do 
+                    if v:IsA("Part") then 
+                        TP(v.CFrame )
+                    end
+                end
+            end
+        end)
+    end 
+end
+
 Ex_Function["Auto Farm Fully"] = function()
     while Config["Auto Farm Fully"] and task.wait() do 
         pcall(function ()
@@ -986,7 +1028,7 @@ end
 task.spawn(function()
 	while task.wait() do
 		pcall(function()
-			if Config["Auto Spawn Boss"] or Config["Auto Spawn Aizen"] or Config["Auto Farm Fully"] or Config["Auto Anos"] then
+			if Config["Auto Spawn Boss"] or Config["Auto Spawn Aizen"] or Config["Auto Farm Fully"] or Config["Auto Anos"] or Config["Auto Xmas"] then
 				if LocalPlayer.Character:WaitForChild("Humanoid").Sit then
 					LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
 				end
